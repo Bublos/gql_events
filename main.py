@@ -73,7 +73,7 @@ async def RunOnceAndReturnSessionMaker():
     """
 
     # makeDrop = os.getenv("DEMO", None) == "True"
-    makeDrop = False
+    makeDrop = True
     logging.info(f'starting engine for "{connectionString} makeDrop={makeDrop}"')
 
     result = await startEngine(
