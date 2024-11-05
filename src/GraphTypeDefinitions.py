@@ -233,7 +233,7 @@ import datetime
 
 # region Event Model
 
-@strawberry.enum(description="")
+@strawberry.enum(description=" TimeUnit")
 class TimeUnit(Enum):
     SECONDS = "seconds"
     MINUTES = "minutes"
