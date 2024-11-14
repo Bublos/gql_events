@@ -19,7 +19,15 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import declarative_base
 from .UUID import UUIDColumn, UUIDFKey
-BaseModel = declarative_base()
+#BaseModel = declarative_base()
+Base = declarative_base()
+
+class BaseModel(Base):
+    created = Column(DateTime, server_default=sqlalchemy.sql.func.now(), comment="Date and time of creation of the event")
+    lastchange = Column(DateTime, server_default=sqlalchemy.sql.func.now(), comment="Date and time of last change of the event")
+    createdby_id = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
+    changedby_id = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
+    rbacobject_id = UUIDFKey(nullable=True, comment="id rbacobject")#Column(ForeignKey("users.id"), index=True, nullable=True)
 
 
 # id = Column(UUID(as_uuid=True), primary_key=True, server_default=sqlalchemy.text("uuid_generate_v4()"),)
