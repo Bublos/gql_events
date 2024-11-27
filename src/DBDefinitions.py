@@ -17,12 +17,12 @@ from sqlalchemy import (
 from sqlalchemy.ext.hybrid import hybrid_property
 # from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, DeclarativeBase
 from .UUID import UUIDColumn, UUIDFKey
 #BaseModel = declarative_base()
-Base = declarative_base()
+#Base = declarative_base()
 
-class BaseModel(Base):
+class BaseModel(DeclarativeBase):
     created = Column(DateTime, server_default=sqlalchemy.sql.func.now(), comment="Date and time of creation of the event")
     lastchange = Column(DateTime, server_default=sqlalchemy.sql.func.now(), comment="Date and time of last change of the event")
     createdby_id = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
