@@ -12,6 +12,7 @@ from dataclasses import dataclass
 import json
 import datetime
 from enum import Enum
+import typing
 
 import strawberry.types
 from uoishelpers.resolvers import getLoadersFromInfo, getUserFromInfo
@@ -55,6 +56,18 @@ from uoishelpers.resolvers import (
     encapsulateDelete
 )
 
+from uoishelpers.resolvers import (
+    getLoadersFromInfo, 
+    createInputs,
+
+    InsertError, 
+    Insert, 
+    UpdateError, 
+    Update, 
+    DeleteError, 
+    Delete
+)
+
 from uoishelpers.gqlpermissions import (
     RBACObjectGQLModel
 )
@@ -71,6 +84,8 @@ from src.DBResolvers import (
 
     InvitationTypeModelResolvers
 )
+
+from uoishelpers.resolvers import getLoadersFromInfo
 
 GroupGQLModel = Annotated["GroupGQLModel", strawberry.lazy(".GraphTypeDefinitionsExt")]
 UserGQLModel = Annotated["UserGQLModel", strawberry.lazy(".GraphTypeDefinitionsExt")]
@@ -750,7 +765,7 @@ class EventInsertGQLModel:
 
 @strawberry.input(description="Datastructure for update")
 class EventUpdateGQLModel:
-    id: IDType
+    id: IDType  #STRAWBERRY FIELD
     lastchange: datetime.datetime
     name: Optional[str] = None
     masterevent_id: Optional[IDType] = None
@@ -780,8 +795,10 @@ class EventResultGQLModel:
         # OnlyForAdmins
     ]
     )
-async def event_insert(self, info: strawberry.types.Info, event: EventInsertGQLModel) -> EventResultGQLModel:
-    return await encapsulateInsert(info, EventGQLModel.getLoader(info), event, EventResultGQLModel(id=None, msg="ok"))
+
+async def event_insert(
+    self, info: strawberry.types.Info, event: EventInsertGQLModel) -> typing.Union[EventGQLModel, InsertError[EventGQLModel]]:
+    return await Insert[EventGQLModel].DoItSafeWay(info=info, entity=event)
 
 @strawberry.mutation(
     description="updates the event",
@@ -790,8 +807,9 @@ async def event_insert(self, info: strawberry.types.Info, event: EventInsertGQLM
         # OnlyForAdmins
         RoleBasedPermissionForRUDOps(roles="administrátor", GQLModel=EventGQLModel)
     ])
-async def event_update(self, info: strawberry.types.Info, event: EventUpdateGQLModel) -> EventResultGQLModel:   
-    return await encapsulateUpdate(info, EventGQLModel.getLoader(info), event, EventResultGQLModel(id=None, msg="ok"))
+async def event_update(
+    self, info: strawberry.types.Info, event: EventUpdateGQLModel) -> typing.Union[EventGQLModel, UpdateError[EventGQLModel]]:
+    return await Update[EventGQLModel].DoItSafeWay(info=info, entity=event)
 
 @strawberry.mutation(
     description="deletes the event",
@@ -799,9 +817,9 @@ async def event_update(self, info: strawberry.types.Info, event: EventUpdateGQLM
         OnlyForAuthentized,
         # OnlyForAdmins
     ])
-async def event_delete(self, info: strawberry.types.Info, id: IDType) -> EventResultGQLModel:
-    # result = await encapsulateDelete(info, EventGQLModel.getLoader(info), id, EventResultGQLModel(id=None, msg="ok"))
-    return await encapsulateDelete(info, EventGQLModel.getLoader(info), id, EventResultGQLModel(id=None, msg="ok"))
+async def event_delete(
+    self, info: strawberry.types.Info, id: IDType) -> typing.Union[None, DeleteError[EventGQLModel]]:
+    return await Delete[EventGQLModel].DoItSafeWay(info=info, entity=id)
 
 # endregion
 
