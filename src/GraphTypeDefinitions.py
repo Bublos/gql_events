@@ -746,36 +746,56 @@ class Query:
 
 from typing import Optional
 # region Event
-@strawberry.input(description="Datastructure for insert")
+@strawberry.input(description="Datastructure for event insert")
 class EventInsertGQLModel:
-    name: str
-    type_id: IDType
-    id: Optional[IDType] = None
-    masterevent_id: Optional[IDType] = None
-    place: Optional[str] = None
-    place_id: Optional[IDType] = None
-    startdate: Optional[datetime.datetime] = \
-        strawberry.field(description="start date of event", default_factory=lambda: datetime.datetime.now())
-    enddate: Optional[datetime.datetime] = \
-        strawberry.field(description="end date of event", default_factory=lambda:(datetime.datetime.now() + datetime.timedelta(minutes = 30)) )
-    createdby: strawberry.Private[IDType] = None
-    rbacobject: Optional[IDType] = \
-        strawberry.field(description="group_id or user_id defines access rights", default=None)
+    name: str = strawberry.field(description="Name of the event")
+    type_id: IDType = strawberry.field(description="Type ID of the event")
+    id: typing.Optional[IDType] = strawberry.field(description="Primary key (UUID) of the event, can be client-generated", default="")
+    
+    masterevent_id: typing.Optional[IDType] = strawberry.field(description="ID of the master event", default="")
+    place: typing.Optional[str] = strawberry.field(description="Location name of the event", default="")
+    place_id: typing.Optional[IDType] = strawberry.field(description="ID of the event location", default="")
+    
+    startdate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Start date of the event",
+        default_factory=lambda: datetime.datetime.now()
+    )
+    enddate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="End date of the event",
+        default_factory=lambda: (datetime.datetime.now() + datetime.timedelta(minutes=30))
+    )
+    
+    rbacobject_id: typing.Optional[IDType] = strawberry.field(
+        description="Group ID or user ID defining access rights",
+        default=""
+    )
+    createdby_id: strawberry.Private[IDType] = ""
 
 
-@strawberry.input(description="Datastructure for update")
+
+@strawberry.input(description="Datastructure for event update")
 class EventUpdateGQLModel:
-    id: IDType  #STRAWBERRY FIELD
-    lastchange: datetime.datetime
-    name: Optional[str] = None
-    masterevent_id: Optional[IDType] = None
-    type_id: Optional[IDType] = None
-    place: Optional[str] = None
-    place_id: Optional[IDType] = None    
-    startdate: Optional[datetime.datetime] = None
-    enddate: Optional[datetime.datetime] = None
-    changedby: strawberry.Private[IDType] = None
-    rbacobject: strawberry.Private[IDType] = None
+    id: IDType = strawberry.field(description="Primary key (UUID) of the event")
+    lastchange: datetime.datetime = strawberry.field(description="Last change timestamp")
+    
+    name: typing.Optional[str] = strawberry.field(description="Name of the event", default=None)
+    masterevent_id: typing.Optional[IDType] = strawberry.field(description="ID of the master event", default=None)
+    type_id: typing.Optional[IDType] = strawberry.field(description="Type of the event", default=None)
+    place: typing.Optional[str] = strawberry.field(description="Location name of the event", default=None)
+    place_id: typing.Optional[IDType] = strawberry.field(description="ID of the event location", default=None)
+    startdate: typing.Optional[datetime.datetime] = strawberry.field(description="Event start date", default=None)
+    enddate: typing.Optional[datetime.datetime] = strawberry.field(description="Event end date", default=None)
+    
+    changedby_id: strawberry.Private[IDType] = None
+    rbacobject_id: strawberry.Private[IDType] = None
+
+
+@strawberry.input(description="Attributes needed for event delete")
+class EventDeleteGQLModel:
+    lastchange: datetime.datetime = strawberry.field(description="Timestamp of the last change")
+    id: IDType = strawberry.field(description="Primary key (UUID) of the event")
+
+
     
 @strawberry.type(description="""Result of event operation""")
 class EventResultGQLModel:
