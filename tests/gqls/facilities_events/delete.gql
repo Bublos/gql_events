@@ -1,0 +1,12 @@
+mutation M($id: UUID!, $lastchange: DateTime!) {
+  facilityReservationDelete(facilityReservation: {id: $id, lastchange: $lastchange}) {
+    __typename
+    ...Error
+  }
+}
+
+fragment Error on FacilityEventGQLModelDeleteError {
+  msg
+  input
+  failed
+}

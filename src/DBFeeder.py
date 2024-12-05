@@ -14,7 +14,7 @@ from src.DBDefinitions import (
     )
 
 get_demodata = lambda :readJsonFile(jsonFileName="./systemdata.json")
-async def initDB(asyncSessionMaker):
+async def initDB(asyncSessionMaker, filename="./systemdata.json"):
 
     isDemo = os.environ.get("DEMODATA", None) in ["True", "true"]
     if isDemo:

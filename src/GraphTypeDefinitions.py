@@ -825,7 +825,7 @@ async def event_insert(
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
-        RoleBasedPermissionForRUDOps(roles="administrátor", GQLModel=EventGQLModel)
+        # RoleBasedPermissionForRUDOps(roles="administrátor", GQLModel=EventGQLModel)
     ])
 async def event_update(
     self, info: strawberry.types.Info, event: EventUpdateGQLModel) -> typing.Union[EventGQLModel, UpdateError[EventGQLModel]]:
