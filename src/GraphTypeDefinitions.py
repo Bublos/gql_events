@@ -750,11 +750,11 @@ from typing import Optional
 class EventInsertGQLModel:
     name: str = strawberry.field(description="Name of the event")
     type_id: IDType = strawberry.field(description="Type ID of the event")
-    id: typing.Optional[IDType] = strawberry.field(description="Primary key (UUID) of the event, can be client-generated", default="")
+    id: typing.Optional[IDType] = strawberry.field(description="Primary key (UUID) of the event, can be client-generated", default=None)
     
-    masterevent_id: typing.Optional[IDType] = strawberry.field(description="ID of the master event", default="")
+    masterevent_id: typing.Optional[IDType] = strawberry.field(description="ID of the master event", default=None)
     place: typing.Optional[str] = strawberry.field(description="Location name of the event", default="")
-    place_id: typing.Optional[IDType] = strawberry.field(description="ID of the event location", default="")
+    place_id: typing.Optional[IDType] = strawberry.field(description="ID of the event location", default=None)
     
     startdate: typing.Optional[datetime.datetime] = strawberry.field(
         description="Start date of the event",
@@ -767,9 +767,9 @@ class EventInsertGQLModel:
     
     rbacobject_id: typing.Optional[IDType] = strawberry.field(
         description="Group ID or user ID defining access rights",
-        default=""
+        default=None
     )
-    createdby_id: strawberry.Private[IDType] = ""
+    createdby_id: strawberry.Private[IDType] = None
 
 
 
@@ -838,8 +838,8 @@ async def event_update(
         # OnlyForAdmins
     ])
 async def event_delete(
-    self, info: strawberry.types.Info, id: IDType) -> typing.Union[None, DeleteError[EventGQLModel]]:
-    return await Delete[EventGQLModel].DoItSafeWay(info=info, entity=id)
+    self, info: strawberry.types.Info, event: EventDeleteGQLModel) -> typing.Union[None, DeleteError[EventGQLModel]]:
+    return await Delete[EventGQLModel].DoItSafeWay(info=info, entity=event)
 
 # endregion
 
@@ -906,22 +906,26 @@ async def presence_delete(self, info: strawberry.types.Info, id: IDType) -> Pres
 # region EventType
 @strawberry.input(description="First datastructure for event type creation")
 class EventTypeInsertGQLModel:
-    name: str = strawberry.field(description="name of event type")
-    name_en: Optional[str] = strawberry.field(description="english name of event type", default=None)
-    id: Optional[IDType] = None
-    createdby: strawberry.Private[IDType] = None
-    rbacobject: Optional[IDType] = \
-        strawberry.field(description="group_id or user_id defines access rights", default=None)
+    name: str = strawberry.field(description="Name of the event type")
+    name_en: typing.Optional[str] = strawberry.field(description="English name of the event type", default=None)
+    id: typing.Optional[IDType] = strawberry.field(description="Primary key (UUID) of the event type, can be client-generated", default=None)
+    createdby_id: strawberry.Private[IDType] = None
+    rbacobject_id: typing.Optional[IDType] = strawberry.field(
+        description="Group ID or user ID defining access rights",
+        default=None
+    )
 
 
-@strawberry.input(description="Datastructure for event type update")
+
+@strawberry.input(description="Datastructure for updating an event type")
 class EventTypeUpdateGQLModel:
-    id: IDType
-    lastchange: datetime.datetime
-    name: Optional[str] = None
-    name_en: Optional[str] = None
-    changedby: strawberry.Private[IDType] = None
-    rbacobject: strawberry.Private[IDType] = None
+    id: IDType = strawberry.field(description="Primary key (UUID) of the event type")
+    lastchange: datetime.datetime = strawberry.field(description="Timestamp of the last modification")
+    name: typing.Optional[str] = strawberry.field(description="Name of the event type", default=None)
+    name_en: typing.Optional[str] = strawberry.field(description="English name of the event type", default=None)
+    changedby_id: strawberry.Private[IDType] = None
+    rbacobject_id: strawberry.Private[IDType] = None
+
 
 @strawberry.type(description="""Result of event type operation""")
 class EventTypeResultGQLModel:
@@ -939,8 +943,12 @@ class EventTypeResultGQLModel:
         OnlyForAuthentized,
         OnlyForAdmins
     ])
-async def event_type_insert(self, info: strawberry.types.Info, event_type: EventTypeInsertGQLModel) -> EventTypeResultGQLModel:
-    return await encapsulateInsert(info, EventTypeGQLModel.getLoader(info), event_type, EventTypeResultGQLModel(id=None, msg="ok"))
+
+async def event_type_insert(
+    self, info: strawberry.types.Info, event_type: EventTypeInsertGQLModel
+) -> typing.Union[EventTypeGQLModel, InsertError[EventTypeGQLModel]]:
+    return await Insert[EventTypeGQLModel].DoItSafeWay(info=info, entity=event_type)
+
 
 @strawberry.mutation(
     description="updates the event",
@@ -948,8 +956,11 @@ async def event_type_insert(self, info: strawberry.types.Info, event_type: Event
         OnlyForAuthentized,
         OnlyForAdmins
     ])
-async def event_type_update(self, info: strawberry.types.Info, event_type: EventTypeUpdateGQLModel) -> EventTypeResultGQLModel:
-    return await encapsulateUpdate(info, EventTypeGQLModel.getLoader(info), event_type, EventTypeResultGQLModel(id=None, msg="ok"))
+async def event_type_update(
+    self, info: strawberry.types.Info, event_type: EventTypeUpdateGQLModel
+) -> typing.Union[EventTypeGQLModel, UpdateError[EventTypeGQLModel]]:
+    return await Update[EventTypeGQLModel].DoItSafeWay(info=info, entity=event_type)
+
 
 @strawberry.mutation(
     description="updates the event",
@@ -957,8 +968,12 @@ async def event_type_update(self, info: strawberry.types.Info, event_type: Event
         OnlyForAuthentized,
         OnlyForAdmins
     ])
-async def event_type_delete(self, info: strawberry.types.Info, id: IDType) -> EventTypeResultGQLModel:
-    return await encapsulateDelete(info, EventTypeGQLModel.getLoader(info), id, EventTypeResultGQLModel(id=None, msg="ok"))
+
+async def event_type_delete(
+    self, info: strawberry.types.Info, event_type: EventDeleteGQLModel
+) -> typing.Union[None, DeleteError[EventTypeGQLModel]]:
+    return await Delete[EventTypeGQLModel].DoItSafeWay(info=info, entity=event_type)
+
 
 # endregion
 

@@ -1,6 +1,16 @@
-
-mutation ($id: UUID!) {
-  result: eventDelete(id: $id) {
-    msg
+mutation ($id: UUID!, $lastchange: DateTime!) {
+  result: eventDelete(event: { id: $id, lastchange: $lastchange }) {
+    __typename
+    ... on EventGQLModelDeleteError {
+      msg
+      Entity {
+        ...Event
+      }
+    }
   }
-}        
+}
+
+fragment Event on EventGQLModel {
+  id
+  lastchange
+}
