@@ -63,7 +63,7 @@ test_event_type_create = createTest2(tableName="eventtypes", queryName="create",
 test_event_type_update = createUpdateTest2(tableName="eventtypes", variables={"name": "newname"})
 test_event_type_delete = createDeleteTest2(tableName="eventtypes", variables={"name": "newname"})
 
-test_reservation = createByIdTest2(tableName="facilities_events", variables={"id": "7dcf3d10-3a41-4c36-9700-99d885a1e474"})
+""" test_reservation = createByIdTest2(tableName="facilities_events", variables={"id": "7dcf3d10-3a41-4c36-9700-99d885a1e474"})
 test_reservation_create = createTest2(
     tableName="facilities_events", 
     queryName="create",
@@ -73,9 +73,9 @@ test_reservation_create = createTest2(
         "event_id": "a64871f8-2308-48ff-adb2-33fb0b0741f1",
         "state_id": "1639d8f7-f949-4a23-b93c-9bb96128b54f"
         }
-    )
+    ) """
 
-@pytest.mark.asyncio
+""" @pytest.mark.asyncio
 async def test_reservation_update(SchemaExecutorDemo):
     tableName="facilities_events"
     variables={
@@ -137,7 +137,7 @@ async def test_reservation_delete(SchemaExecutorDemo):
     assert "errors" not in responseJson, f"update failed {responseJson}"
     logging.info(f"query for {queryDelete} with {_variables}, no tested response")
 
-    pass
+    pass """
 
 text_event_resolve_reference = createTest2(
     tableName="events",

@@ -2,22 +2,20 @@ mutation ($id: UUID, $name: String!, $name_en: String) {
   result: eventTypeInsert(
     eventType: {id: $id, name: $name, nameEn: $name_en}
   ) {
-    id
-    msg
-    result: eventType {
-      ...EventType
+    __typename
+    ...EventType
+    ...on InsertError {
+      msg
     }
   }
 }
 
-
 fragment EventType on EventTypeGQLModel {
-  __typename
-  lastchange
   id
   name
-  
+  nameEn
+  lastchange
   created
   createdby { id }
-  changedby { id } 
+  changedby { id }
 }

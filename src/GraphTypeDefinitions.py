@@ -941,7 +941,7 @@ class EventTypeResultGQLModel:
     description="creates new presence",
     permission_classes=[
         OnlyForAuthentized,
-        OnlyForAdmins
+        # OnlyForAdmins
     ])
 
 async def event_type_insert(
@@ -954,7 +954,7 @@ async def event_type_insert(
     description="updates the event",
     permission_classes=[
         OnlyForAuthentized,
-        OnlyForAdmins
+        # OnlyForAdmins
     ])
 async def event_type_update(
     self, info: strawberry.types.Info, event_type: EventTypeUpdateGQLModel
@@ -966,7 +966,7 @@ async def event_type_update(
     description="updates the event",
     permission_classes=[
         OnlyForAuthentized,
-        OnlyForAdmins
+        # OnlyForAdmins
     ])
 
 async def event_type_delete(

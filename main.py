@@ -136,7 +136,7 @@ async def get_context(request: Request):
     # result = {**context, **connectionContext}
     result = {**context}
     result["request"] = request
-    result["user"] = request.scope.get("user", None)
+    # result["user"] = request.scope.get("user", None)
     logging.info(f"context created {result}")
     return result
 

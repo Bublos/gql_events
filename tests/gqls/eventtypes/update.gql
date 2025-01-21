@@ -2,22 +2,20 @@ mutation ($id: UUID!, $lastchange: DateTime!, $name: String!, $name_en: String) 
   result: eventTypeUpdate(
     eventType: {id: $id, lastchange: $lastchange, name: $name, nameEn: $name_en}
   ) {
-    id
-    msg
-    result: eventType {
-      ...EventType
+    __typename
+    ...EventType
+    ...on EventTypeGQLModelUpdateError {
+      msg
     }
   }
 }
 
-
 fragment EventType on EventTypeGQLModel {
-  __typename
-  lastchange
   id
   name
-  
+  nameEn
+  lastchange
   created
   createdby { id }
-  changedby { id } 
+  changedby { id }
 }
