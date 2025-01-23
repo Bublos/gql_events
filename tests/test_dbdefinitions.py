@@ -17,8 +17,8 @@ def test_connection_string():
 
 
 def test_connection_uuidcolumn():
-    from src.DBDefinitions import UUIDColumn
-    col = UUIDColumn(name="name")
+    from src.UUID import UUIDColumn
+    col = UUIDColumn()
 
     assert col is not None
 
