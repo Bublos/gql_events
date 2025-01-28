@@ -5,6 +5,7 @@ import sqlalchemy
 import datetime
 import os.path
 import json
+from unittest.mock import AsyncMock, MagicMock
 
 def checkExpected(responseJSON, expectedJSON):
     def compareLists(left, right):
@@ -230,3 +231,4 @@ def createDeleteTest2(tableName, variables=None, expectedJson=None):
             logging.info(f"query for {queryDelete} with {_variables}, no tested response")
         
     return result_test
+

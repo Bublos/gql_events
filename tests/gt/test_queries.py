@@ -62,6 +62,18 @@ test_event_type_by_id = createByIdTest2(tableName="eventtypes")
 test_event_type_create = createTest2(tableName="eventtypes", queryName="create", variables={"name": "newname"})
 test_event_type_update = createUpdateTest2(tableName="eventtypes", variables={"name": "newname"})
 test_event_type_delete = createDeleteTest2(tableName="eventtypes", variables={"name": "newname"})
+test_event_user_update = createUpdateTest2(
+    tableName="events_users", 
+    variables={
+        "id": "63145c51-7772-4621-8073-cffd33f8c6bc", 
+        "invitationtype_id": "e8713b6e-a79c-11ed-b76e-0242ac110002"
+    }
+)
+
+
+
+
+
 
 """ test_reservation = createByIdTest2(tableName="facilities_events", variables={"id": "7dcf3d10-3a41-4c36-9700-99d885a1e474"})
 test_reservation_create = createTest2(

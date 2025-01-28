@@ -7,6 +7,7 @@ mutation($user_id: UUID!, $event_id: UUID!) {
     result: event {
       id
       name
+      lastchange
       
     }
   }
