@@ -1,14 +1,9 @@
-mutation($user_id: UUID!, $event_id: UUID!) {
+mutation($user_id: UUID!, $event_id: UUID!,$lastchange: DateTime!) {
   result: eventUserDelete(eventUser: {
-    userId: $user_id, eventId: $event_id
+    userId: $user_id, eventId: $event_id, lastchange:$lastchange
   }) {
-    id
+     
     msg
-    result: event {
-      id
-      name
-      lastchange
-      
-    }
+   
   }
 }

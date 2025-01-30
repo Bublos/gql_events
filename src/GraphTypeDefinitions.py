@@ -863,6 +863,11 @@ class PresenceUpdateGQLModel:
     presencetype_id: Optional[IDType] = None
     changedby: strawberry.Private[IDType] = None
     rbacobject: strawberry.Private[IDType] = None
+
+@strawberry.input(description="Datastructure for delete")
+class PresenceDeleteGQLModel:
+    id: IDType
+    lastchange: datetime.datetime
     
 @strawberry.type(description="""Result of user operation""")
 class PresenceResultGQLModel:
@@ -880,8 +885,11 @@ class PresenceResultGQLModel:
         OnlyForAuthentized,
         # OnlyForAdmins
     ])
-async def presence_insert(self, info: strawberry.types.Info, presence: PresenceInsertGQLModel) -> PresenceResultGQLModel:
-    return await encapsulateInsert(info, PresenceGQLModel.getLoader(info), presence, PresenceResultGQLModel(id=None, msg="ok"))
+async def presence_insert(
+    self, info: strawberry.types.Info, presence: PresenceInsertGQLModel
+) -> typing.Union[PresenceGQLModel, InsertError[PresenceGQLModel]]:
+    return await Insert[PresenceGQLModel].DoItSafeWay(info=info, entity=presence)
+
 
 @strawberry.mutation(
     description="updates the presence",
@@ -889,8 +897,11 @@ async def presence_insert(self, info: strawberry.types.Info, presence: PresenceI
         OnlyForAuthentized,
         # OnlyForAdmins
     ])
-async def presence_update(self, info: strawberry.types.Info, presence: PresenceUpdateGQLModel) -> PresenceResultGQLModel:
-    return await encapsulateUpdate(info, PresenceGQLModel.getLoader(info), presence, PresenceResultGQLModel(id=None, msg="ok"))
+async def presence_update(
+    self, info: strawberry.types.Info, presence: PresenceUpdateGQLModel
+) -> typing.Union[PresenceGQLModel, UpdateError[PresenceGQLModel]]:
+    return await Update[PresenceGQLModel].DoItSafeWay(info=info, entity=presence)
+
 
 @strawberry.mutation(
     description="deletes the event",
@@ -898,8 +909,14 @@ async def presence_update(self, info: strawberry.types.Info, presence: PresenceU
         OnlyForAuthentized,
         # OnlyForAdmins
     ])
-async def presence_delete(self, info: strawberry.types.Info, id: IDType) -> PresenceResultGQLModel:
-    return await encapsulateDelete(info, PresenceGQLModel.getLoader(info), id, PresenceResultGQLModel(id=None, msg="ok"))
+# async def presence_delete(self, info: strawberry.types.Info, id: IDType) -> PresenceResultGQLModel:
+#     return await encapsulateDelete(info, PresenceGQLModel.getLoader(info), id, PresenceResultGQLModel(id=None, msg="ok"))
+
+async def presence_delete(
+    self, info: strawberry.types.Info, presence: PresenceDeleteGQLModel
+) -> typing.Optional[DeleteError[PresenceGQLModel]]:
+    return await Delete[PresenceGQLModel].DoItSafeWay(info=info, entity=presence)
+
 
 # endregion
 
@@ -995,6 +1012,11 @@ class PresenceTypeUpdateGQLModel:
     changedby: strawberry.Private[IDType] = None
     rbacobject: strawberry.Private[IDType] = None
 
+@strawberry.input(description="Datastructure for event type delete")
+class PresenceTypeDeleteGQLModel:
+    id: IDType
+    lastchange: datetime.datetime
+
 @strawberry.type(description="""Result of event type operation""")
 class PresenceTypeResultGQLModel:
     id: IDType = None
@@ -1011,8 +1033,11 @@ class PresenceTypeResultGQLModel:
         OnlyForAuthentized,
         OnlyForAdmins
     ])
-async def presence_type_insert(self, info: strawberry.types.Info, presence_type: PresenceTypeInsertGQLModel) -> PresenceTypeResultGQLModel:
-    return await encapsulateInsert(info, PresenceTypeGQLModel.getLoader(info), presence_type, EventTypeResultGQLModel(id=None, msg="ok"))
+async def presence_type_insert(
+    self, info: strawberry.types.Info, presence_type: PresenceTypeInsertGQLModel
+) -> typing.Union[PresenceTypeGQLModel, InsertError[PresenceTypeGQLModel]]:
+    return await Insert[PresenceTypeGQLModel].DoItSafeWay(info=info, entity=presence_type)
+
 
 @strawberry.mutation(
     description="updates the presence type",
@@ -1020,8 +1045,11 @@ async def presence_type_insert(self, info: strawberry.types.Info, presence_type:
         OnlyForAuthentized,
         OnlyForAdmins
     ])
-async def presence_type_update(self, info: strawberry.types.Info, presence_type: PresenceTypeUpdateGQLModel) -> PresenceTypeResultGQLModel:
-    return await encapsulateUpdate(info, PresenceTypeGQLModel.getLoader(info), presence_type, PresenceTypeResultGQLModel(id=None, msg="ok"))
+async def presence_type_update(
+    self, info: strawberry.types.Info, presence_type: PresenceTypeUpdateGQLModel
+) -> typing.Union[PresenceTypeGQLModel, UpdateError[PresenceTypeGQLModel]]:
+    return await Update[PresenceTypeGQLModel].DoItSafeWay(info=info, entity=presence_type)
+
 
 @strawberry.mutation(
     description="deletes the presence type",
@@ -1029,8 +1057,11 @@ async def presence_type_update(self, info: strawberry.types.Info, presence_type:
         OnlyForAuthentized,
         OnlyForAdmins
     ])
-async def presence_type_delete(self, info: strawberry.types.Info, id: IDType) -> PresenceTypeResultGQLModel:
-    return await encapsulateDelete(info, PresenceTypeGQLModel.getLoader(info), id, PresenceTypeResultGQLModel(id=None, msg="ok"))
+async def presence_type_delete(
+    self, info: strawberry.types.Info, presence_type: PresenceTypeDeleteGQLModel
+) -> typing.Union[None, DeleteError[PresenceTypeGQLModel]]:
+    return await Delete[PresenceTypeGQLModel].DoItSafeWay(info=info, entity=presence_type)
+
 
 # endregion
 
@@ -1054,6 +1085,11 @@ class InvitationTypeUpdateGQLModel:
     changedby: strawberry.Private[IDType] = None
     rbacobject: strawberry.Private[IDType] = None
 
+@strawberry.input(description="Datastructure for invitation type delete")
+class InvitationTypeDeleteGQLModel:
+    id: IDType
+    lastchange: datetime.datetime
+
 @strawberry.type(description="""Result of event type operation""")
 class InvitationTypeResultGQLModel:
     id: IDType = None
@@ -1070,8 +1106,11 @@ class InvitationTypeResultGQLModel:
         OnlyForAuthentized,
         OnlyForAdmins
     ])
-async def invitation_type_insert(self, info: strawberry.types.Info, invitation_type: InvitationTypeInsertGQLModel) -> InvitationTypeResultGQLModel:
-    return await encapsulateInsert(info, InvitationTypeGQLModel.getLoader(info), invitation_type, InvitationTypeResultGQLModel(id=None, msg="ok"))
+async def invitation_type_insert(
+    self, info: strawberry.types.Info, invitation_type: InvitationTypeInsertGQLModel
+) -> typing.Union[InvitationTypeGQLModel, InsertError[InvitationTypeGQLModel]]:
+    return await Insert[InvitationTypeGQLModel].DoItSafeWay(info=info, entity=invitation_type)
+
 
 @strawberry.mutation(
     description="updates the invitation type",
@@ -1079,8 +1118,11 @@ async def invitation_type_insert(self, info: strawberry.types.Info, invitation_t
         OnlyForAuthentized,
         OnlyForAdmins
     ])
-async def invitation_type_update(self, info: strawberry.types.Info, invitation_type: InvitationTypeUpdateGQLModel) -> InvitationTypeResultGQLModel:
-    return await encapsulateUpdate(info, InvitationTypeGQLModel.getLoader(info), invitation_type, InvitationTypeResultGQLModel(id=None, msg="ok"))
+async def invitation_type_update(
+    self, info: strawberry.types.Info, invitation_type: InvitationTypeUpdateGQLModel
+) -> typing.Union[InvitationTypeGQLModel, UpdateError[InvitationTypeGQLModel]]:
+    return await Update[InvitationTypeGQLModel].DoItSafeWay(info=info, entity=invitation_type)
+
 
 @strawberry.mutation(
     description="updates the invitation type",
@@ -1088,8 +1130,11 @@ async def invitation_type_update(self, info: strawberry.types.Info, invitation_t
         OnlyForAuthentized,
         OnlyForAdmins
     ])
-async def invitation_type_delete(self, info: strawberry.types.Info, id: IDType) -> InvitationTypeResultGQLModel:
-    return await encapsulateDelete(info, InvitationTypeGQLModel.getLoader(info), id, InvitationTypeResultGQLModel(id=None, msg="ok"))
+async def invitation_type_delete(
+    self, info: strawberry.types.Info, invitation_type: InvitationTypeDeleteGQLModel
+) -> typing.Union[None, DeleteError[InvitationTypeGQLModel]]:
+    return await Delete[InvitationTypeGQLModel].DoItSafeWay(info=info, entity=invitation_type)
+
 
 # endregion
 
@@ -1119,6 +1164,7 @@ class EventUserUpdateGQLModel:
 class EventUserDeleteGQLModel:
     event_id: IDType
     user_id: IDType
+    lastchange: datetime.datetime
 
 @strawberry.mutation(
     description="creates new presence",
@@ -1126,15 +1172,11 @@ class EventUserDeleteGQLModel:
         OnlyForAuthentized,
         # OnlyForAdmins
     ])
-async def event_user_insert(self, info: strawberry.types.Info, event_user: EventUserInsertGQLModel) -> EventResultGQLModel:
-    loader = PresenceGQLModel.getLoader(info)
-    rows = await loader.filter_by(event_id=event_user.event_id, user_id=event_user.user_id)
-    row = next(rows, None)
-    result = EventResultGQLModel(id=event_user.event_id, msg="ok")
-    result.msg = "ok" if row is None else "fail"
-    if row is None:
-        await loader.insert(event_user)
-    return result
+async def event_user_insert(
+    self, info: strawberry.types.Info, event_user: EventUserInsertGQLModel
+) -> typing.Union[PresenceGQLModel, InsertError[PresenceGQLModel]]:
+    return await Insert[PresenceGQLModel].DoItSafeWay(info=info, entity=event_user)
+
 
 @strawberry.mutation(
     description="updates presence",
@@ -1142,8 +1184,27 @@ async def event_user_insert(self, info: strawberry.types.Info, event_user: Event
         OnlyForAuthentized,
         # OnlyForAdmins
     ])
-async def event_user_update(self, info: strawberry.types.Info, event_user: EventUserUpdateGQLModel) -> EventResultGQLModel:
-    return await encapsulateUpdate(info, PresenceGQLModel.getLoader(info), event_user, EventResultGQLModel(id=event_user.id, msg="ok"))
+async def event_user_update(
+    self, info: strawberry.types.Info, event_user: EventUserUpdateGQLModel
+) -> typing.Union[PresenceGQLModel, UpdateError[PresenceGQLModel]]:
+    return await Update[PresenceGQLModel].DoItSafeWay(info=info, entity=event_user)
+
+
+# @strawberry.mutation(
+#     description="deletes presence",
+#     permission_classes=[
+#         OnlyForAuthentized,
+#         # OnlyForAdmins
+#     ])
+# async def event_user_delete(self, info: strawberry.types.Info, event_user: EventUserDeleteGQLModel) -> EventResultGQLModel:
+#     loader = PresenceGQLModel.getLoader(info)
+#     rows = await loader.filter_by(event_id=event_user.event_id, user_id=event_user.user_id)
+#     row = next(rows, None)
+#     result = EventResultGQLModel(id=event_user.event_id, msg="ok")
+#     result.msg = "ok" if row is not None else "fail"
+#     if row is not None:
+#         await loader.delete(row.id)
+#     return result
 
 @strawberry.mutation(
     description="deletes presence",
@@ -1151,15 +1212,25 @@ async def event_user_update(self, info: strawberry.types.Info, event_user: Event
         OnlyForAuthentized,
         # OnlyForAdmins
     ])
-async def event_user_delete(self, info: strawberry.types.Info, event_user: EventUserDeleteGQLModel) -> EventResultGQLModel:
-    loader = PresenceGQLModel.getLoader(info)
-    rows = await loader.filter_by(event_id=event_user.event_id, user_id=event_user.user_id)
-    row = next(rows, None)
-    result = EventResultGQLModel(id=event_user.event_id, msg="ok")
-    result.msg = "ok" if row is not None else "fail"
-    if row is not None:
-        await loader.delete(row.id)
-    return result
+async def event_user_delete(
+    self, info: strawberry.types.Info, event_user: EventUserDeleteGQLModel
+) -> typing.Optional[DeleteError[PresenceGQLModel]]:
+    return await Delete[PresenceGQLModel].DoItSafeWay(info=info, entity=event_user)
+
+# async def event_user_delete(
+#     self, info: strawberry.types.Info, event_user: EventUserDeleteGQLModel
+# ) -> typing.Union[None, DeleteError[PresenceGQLModel]]:
+#     loader = PresenceGQLModel.getLoader(info)
+#     rows = await loader.filter_by(event_id=event_user.event_id, user_id=event_user.user_id)
+#     row = next(rows, None)
+
+#     if row is None:
+#         return None  # Or return DeleteError[PresenceGQLModel]("Entity not found")
+
+#     return await Delete[PresenceGQLModel].DoItSafeWay(info=info, entity=row)
+
+
+
 
 # endregion
 
@@ -1182,21 +1253,21 @@ class EventGroupDeleteGQLModel:
     createdby: strawberry.Private[IDType] = None
     rbacobject: strawberry.Private[IDType] = None
 
-@strawberry.mutation(
-    description="creates new presence type",
-    permission_classes=[
-        OnlyForAuthentized,
-        # OnlyForAdmins
-    ])
-async def event_group_insert(self, info: strawberry.types.Info, event_group: EventGroupInputGQLModel) -> EventResultGQLModel:
-    loader = getLoadersFromInfo(info).events_groups
-    rows = await loader.filter_by(event_id=event_group.event_id, group_id=event_group.group_id)
-    row = next(rows, None)
-    result = EventResultGQLModel(id=event_group.event_id, msg="ok")
-    result.msg = "ok" if row is None else "fail"
-    if row is None:
-        await loader.insert(event_group)
-    return result
+# @strawberry.mutation(
+#     description="creates new presence type",
+#     permission_classes=[
+#         OnlyForAuthentized,
+#         # OnlyForAdmins
+#     ])
+# async def event_group_insert(self, info: strawberry.types.Info, event_group: EventGroupInputGQLModel) -> EventResultGQLModel:
+#     loader = getLoadersFromInfo(info).events_groups
+#     rows = await loader.filter_by(event_id=event_group.event_id, group_id=event_group.group_id)
+#     row = next(rows, None)
+#     result = EventResultGQLModel(id=event_group.event_id, msg="ok")
+#     result.msg = "ok" if row is None else "fail"
+#     if row is None:
+#         await loader.insert(event_group)
+#     return result
 
 @strawberry.mutation(
     description="creates new presence type",
@@ -1204,15 +1275,51 @@ async def event_group_insert(self, info: strawberry.types.Info, event_group: Eve
         OnlyForAuthentized,
         # OnlyForAdmins
     ])
-async def event_group_delete(self, info: strawberry.types.Info, event_group: EventGroupInputGQLModel) -> EventResultGQLModel:
+async def event_group_insert(
+    self, info: strawberry.types.Info, event_group: EventGroupInputGQLModel
+) -> typing.Union[EventGQLModel, UpdateError[EventGQLModel]]:
     loader = getLoadersFromInfo(info).events_groups
     rows = await loader.filter_by(event_id=event_group.event_id, group_id=event_group.group_id)
     row = next(rows, None)
-    result = EventResultGQLModel(id=event_group.event_id, msg="ok")
-    result.msg = "ok" if row is not None else "fail"
+    event_entity = await EventGQLModel.resolve_reference(info, event_group.event_id)
     if row is not None:
-        await loader.delete(row.id)
-    return result
+        return UpdateError[EventGQLModel](msg="fail", _entity=event_entity, _input=event_group)  # Prevent duplicate entries
+
+    return event_entity
+
+
+# @strawberry.mutation(
+#     description="creates new presence type",
+#     permission_classes=[
+#         OnlyForAuthentized,
+#         # OnlyForAdmins
+#     ])
+# async def event_group_delete(self, info: strawberry.types.Info, event_group: EventGroupInputGQLModel) -> EventResultGQLModel:
+#     loader = getLoadersFromInfo(info).events_groups
+#     rows = await loader.filter_by(event_id=event_group.event_id, group_id=event_group.group_id)
+#     row = next(rows, None)
+#     result = EventResultGQLModel(id=event_group.event_id, msg="ok")
+#     result.msg = "ok" if row is not None else "fail"
+#     if row is not None:
+#         await loader.delete(row.id)
+#     return result
+
+@strawberry.mutation(
+    description="creates new presence type",
+    permission_classes=[
+        OnlyForAuthentized,
+        # OnlyForAdmins
+    ])
+async def event_group_delete(self, info: strawberry.types.Info, event_group: EventGroupInputGQLModel) -> typing.Union[EventGQLModel, UpdateError[EventGQLModel]]:
+    loader = getLoadersFromInfo(info).events_groups
+    rows = await loader.filter_by(event_id=event_group.event_id, group_id=event_group.group_id)
+    row = next(rows, None)
+    event_entity = await EventGQLModel.resolve_reference(info, event_group.event_id)
+    if row is None:
+        return UpdateError[EventGQLModel](msg="fail", _entity=event_entity, _input=event_group)
+    await loader.delete(row.id)
+    return event_entity
+
 
 # endregion
 ###########################################################################################################################
@@ -1245,7 +1352,7 @@ class Mutation:
     event_invitation_type_delete = invitation_type_delete
 
     event_user_insert = event_user_insert
-    event_user_delete = event_user_delete
+    # event_user_delete = event_user_delete
     event_user_update = event_user_update
 
     event_group_insert = event_group_insert

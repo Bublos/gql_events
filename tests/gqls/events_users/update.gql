@@ -1,13 +1,20 @@
-mutation($id: UUID!, $invitationtype_id: UUID, $presencetype_id: UUID, $lastchange: DateTime!) {
-  result: eventUserUpdate(eventUser: {
-    id: $id, invitationtypeId: $invitationtype_id, presencetypeId: $presencetype_id, lastchange: $lastchange
-  }) {
-    id
-    msg
-    result: event {
-      id
-      name
-      
+mutation ($id: UUID!, $lastchange: DateTime!, $invitationtype_id: UUID, $presencetype_id: UUID) {
+  result: eventUserUpdate(
+    eventUser: { id: $id, lastchange: $lastchange, invitationtypeId: $invitationtype_id, presencetypeId: $presencetype_id }
+  ) {
+    __typename
+    ...EventUser
+    ...on PresenceGQLModelUpdateError {
+      msg
     }
+  }
+}
+
+fragment EventUser on PresenceGQLModel {
+  id
+  lastchange
+  event {
+    id
+    name
   }
 }
