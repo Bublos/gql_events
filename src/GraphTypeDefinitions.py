@@ -904,7 +904,7 @@ async def presence_update(
 
 
 @strawberry.mutation(
-    description="deletes the event",
+    description="deletes the presence",
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
@@ -955,7 +955,7 @@ class EventTypeResultGQLModel:
         return result
     
 @strawberry.mutation(
-    description="creates new presence",
+    description="creates new event type",
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
@@ -968,7 +968,7 @@ async def event_type_insert(
 
 
 @strawberry.mutation(
-    description="updates the event",
+    description="updates the event type",
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
@@ -980,7 +980,7 @@ async def event_type_update(
 
 
 @strawberry.mutation(
-    description="updates the event",
+    description="deletes the event type",
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
@@ -1125,7 +1125,7 @@ async def invitation_type_update(
 
 
 @strawberry.mutation(
-    description="updates the invitation type",
+    description="deletes the invitation type",
     permission_classes=[
         OnlyForAuthentized,
         OnlyForAdmins
@@ -1167,7 +1167,7 @@ class EventUserDeleteGQLModel:
     lastchange: datetime.datetime
 
 @strawberry.mutation(
-    description="creates new presence",
+    description="creates new event user",
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
@@ -1179,7 +1179,7 @@ async def event_user_insert(
 
 
 @strawberry.mutation(
-    description="updates presence",
+    description="updates event user",
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
@@ -1207,7 +1207,7 @@ async def event_user_update(
 #     return result
 
 @strawberry.mutation(
-    description="deletes presence",
+    description="deletes event user",
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
@@ -1270,7 +1270,7 @@ class EventGroupDeleteGQLModel:
 #     return result
 
 @strawberry.mutation(
-    description="creates new presence type",
+    description="inserts event group to event",
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
@@ -1305,7 +1305,7 @@ async def event_group_insert(
 #     return result
 
 @strawberry.mutation(
-    description="creates new presence type",
+    description="deleetes event group from event",
     permission_classes=[
         OnlyForAuthentized,
         # OnlyForAdmins
